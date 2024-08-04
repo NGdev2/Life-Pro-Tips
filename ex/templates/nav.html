@@ -1,0 +1,33 @@
+{% load static %}
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+<link rel="stylesheet" href="{% static 'ex/css/nav.css' %}">
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <!-- Logo and Hello user -->
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="{% static 'ex/img/Logo_life_pro_tips.png' %}" alt="Logo" width="50" height="50" class="me-2">
+            <span>Hello {{ username }}{% if user.is_authenticated %} [{{ user.reputation }}]{% endif %}!</span>
+        </a>
+
+        <!-- Responsive toggle button -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Links -->
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ms-auto flex-column flex-lg-row">
+                <a class="nav-item nav-link {% if request.path == '/' %}active{% endif %}" href="/">Home page</a>
+                {% if user.is_authenticated %}
+                    <a class="nav-item nav-link" href="/logout">Log out</a>
+                {% else %}
+                    <a class="nav-item nav-link {% if request.path == '/login' %}active{% endif %}" href="/login">Login</a>
+                    <a class="nav-item nav-link {% if request.path == '/registration' %}active{% endif %}" href="/registration">Registration</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'nav.html' with username=username %}
+    <div class="container">
+        <h1>Welcome to Life Pro Tips</h1>
+        {% if user.is_authenticated %}
+        <div class="row">
+            <div class="col-12">
+                <form method="post" class="form-inline">
+                    {% csrf_token %}
+                    <div class="form-group mb-2">
+                        {{ form.content.label_tag }}
+                        {{ form.content }}
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2 ml-2">Add Tip</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-12">
+                <h2>Tips:</h2>
+                <ul class="list-group">
+                    {% for tip in tips %}
+                    <li class="list-group-item">
+                        <strong>{{ tip.date|date:"Y-m-d H:i" }}</strong> - {{ tip.content }} by <em>{{ tip.author.username }} [{{ tip.author.reputation }}]</em>
+                        {% if user.is_authenticated %}
+                            <div class="float-right">
+                                <a href="{% url 'upvote_tip' tip.id %}" class="btn btn-sm btn-success {% if user in tip.upvotes.all %}active{% endif %}">
+                                    Upvote ({{ tip.upvotes.count }})
+                                </a>
+                                {% if user == tip.author or user.can_downvote %}
+                                    <a href="{% url 'downvote_tip' tip.id %}" class="btn btn-sm btn-danger {% if user in tip.downvotes.all %}active{% endif %}">
+                                        Downvote ({{ tip.downvotes.count }})
+                                    </a>
+                                {% endif %}
+                                {% if user == tip.author or user.can_delete_tips %}
+                                    <a href="{% url 'delete_tip' tip.id %}" class="btn btn-sm btn-warning" onclick="return confirm('Are you sure you want to delete this tip?');">
+                                        Delete
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <div class="float-right">
+                                <span class="text-muted">Upvotes: {{ tip.upvotes.count }}</span>
+                                <span class="text-muted">Downvotes: {{ tip.downvotes.count }}</span>
+                            </div>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

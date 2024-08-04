@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% include 'nav.html' %}
+    <div class="container h-100">
+        <div class="row d-flex align-items-center justify-content-center h-100">
+            <div class="col-xl-9">
+                <h1 class="d-flex justify-content-center">Login</h1>
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                <form class="border border-3 p-10px" style="border-radius: 10px;" action="" method="post">
+                    {% csrf_token %}
+
+                    <div class="row align-items-center py-3 px-3">
+                        <label class="col-md-3 ps-5" for="username">Enter your username</label>
+                        <div class="col-md-9 pe-5 ps-5 ps-md-0">
+                            <input type="text" maxlength="64" id="username" name="username" class="form-control form-control-lg" value="{{ request.POST.username }}" />
+                        </div>
+                    </div>
+
+                    <div class="row align-items-center py-3 px-3">
+                        <label class="col-md-3 ps-5" for="password">Enter your password</label>
+                        <div class="col-md-9 px-5 ps-md-0">
+                            <input type="password" id="password" name="password" class="form-control form-control-lg" />
+                        </div>
+                    </div>
+
+                    <div class="row pt-2">
+                        <a class="d-flex justify-content-center" style="text-decoration: none;" href="{% url 'registration' %}">Don't have an account? Sign up</a>
+                    </div>
+
+                    <div class="px-5 py-4 d-flex justify-content-center">
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Log in</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
